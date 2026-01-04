@@ -2,8 +2,9 @@
 
 #include <windows.h>
 #include <iostream>
+using namespace std;
 
-void PrintColoredText(std::string text,WORD wAttributes= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_RED | BACKGROUND_INTENSITY) {
+void PrintColoredText(string text,WORD wAttributes= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_RED | BACKGROUND_INTENSITY) {
     HANDLE hConsole;
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     WORD originalAttributes;
@@ -14,7 +15,7 @@ void PrintColoredText(std::string text,WORD wAttributes= BACKGROUND_BLUE | BACKG
 
     // Print text with a different color
     SetConsoleTextAttribute(hConsole,wAttributes );
-    std::cout << text;
+    cout << text;
     SetConsoleTextAttribute(hConsole, originalAttributes);
 }
 
@@ -63,10 +64,10 @@ class Card {
                 PrintColoredText("♦");
                 break;
             case Card::Club:
-                std::cout << "♣";
+                cout << "♣";
                 break;
             case Card::Spade:
-                std::cout << "♠";
+                cout << "♠";
                 break;
             default:
                 break;
@@ -88,8 +89,8 @@ WORD PrintCardBox(Card::Suit index, Card::Rank rank,int x,int y,int StackPositio
     WORD CardColorCode = rank == Card::Rank::Flipped?BACKGROUND_GREEN|BACKGROUND_INTENSITY:BACKGROUND_BLUE | BACKGROUND_INTENSITY;
     WORD CardTextColorCode = index <= 2 ? BACKGROUND_BLUE | BACKGROUND_INTENSITY | FOREGROUND_RED : BACKGROUND_BLUE | BACKGROUND_INTENSITY;
     CardTextColorCode = rank == Card::Rank::Flipped ? BACKGROUND_GREEN | BACKGROUND_INTENSITY | FOREGROUND_BLUE : CardTextColorCode;
-    std::string symbol;
-    std::string rankText;
+    string symbol;
+    string rankText;
     if (rank == Card::Rank::Flipped) {
         symbol = "?";
         rankText = "? ";
@@ -159,28 +160,28 @@ WORD PrintCardBox(Card::Suit index, Card::Rank rank,int x,int y,int StackPositio
         }
     }
     if(StackPosition==0|| oldCardColor==0)
-        std::cout << " _____ ";
+        cout << " _____ ";
     else {
         
-        std::cout << "|"; PrintColoredText("_____", oldCardColor); std::cout << "|";
+        cout << "|"; PrintColoredText("_____", oldCardColor); cout << "|";
 
     }
     coord.Y=coord.Y+1;
     SetConsoleCursorPosition(hConsole, coord);
-    std::cout << "|"; PrintColoredText(rankText + "  " + symbol, CardTextColorCode); std::cout << "|";
+    cout << "|"; PrintColoredText(rankText + "  " + symbol, CardTextColorCode); cout << "|";
     coord.Y++;
     SetConsoleCursorPosition(hConsole, coord);
-    std::cout << "|"; PrintColoredText("     ", CardTextColorCode); std::cout << "|";
+    cout << "|"; PrintColoredText("     ", CardTextColorCode); cout << "|";
     coord.Y++;
     SetConsoleCursorPosition(hConsole, coord);
-    std::cout << "|"; PrintColoredText("     ", CardTextColorCode); std::cout << "|";
+    cout << "|"; PrintColoredText("     ", CardTextColorCode); cout << "|";
     char reverse[] = { rankText[1], rankText[0] ,'\0' };
     rankText = rankText == "10" ? rankText : reverse;
     coord.Y++;
     SetConsoleCursorPosition(hConsole, coord);
-    std::cout << "|"; PrintColoredText(symbol + "  " + rankText, CardTextColorCode); std::cout << "|";
+    cout << "|"; PrintColoredText(symbol + "  " + rankText, CardTextColorCode); cout << "|";
     coord.Y++;
     SetConsoleCursorPosition(hConsole, coord);
-    std::cout << " ‾‾‾‾‾ ";
+    cout << " ‾‾‾‾‾ ";
     return CardColorCode;
 }

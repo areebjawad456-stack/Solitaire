@@ -7,6 +7,7 @@
 #include <queue>
 #include "GameLogic.h"
 #include "Card.h"
+using namespace std;
 
 #define printSelectedCard_X 100
 #define printSelectedCard_Y 17
@@ -24,10 +25,10 @@ void setConsoleSettings() {
         newSize.Y = 1500;
 
         if (SetConsoleScreenBufferSize(hConsole, newSize)) {
-            std::cout << "Console buffer size set to 1500 rows (scrollable)." << std::endl;
+            cout << "Console buffer size set to 1500 rows (scrollable)." << endl;
         }
         else {
-            std::cerr << "Failed to set console buffer size." << std::endl;
+            cerr << "Failed to set console buffer size." << endl;
         }
 
         SMALL_RECT newWindow;
@@ -37,14 +38,14 @@ void setConsoleSettings() {
         newWindow.Bottom = csbi.srWindow.Top + 3000;
 
         if (SetConsoleWindowInfo(hConsole, TRUE, &newWindow)) {
-            std::cout << "Console window size set to 80x20 and is fixed." << std::endl;
+            cout << "Console window size set to 80x20 and is fixed." << endl;
         }
         else {
-            std::cerr << "Failed to set console window size." << std::endl;
+            cerr << "Failed to set console window size." << endl;
         }
     }
     else {
-        std::cerr << "Error getting console screen buffer info!" << std::endl;
+        cerr << "Error getting console screen buffer info!" << endl;
     }
 }
 
@@ -54,26 +55,26 @@ void hideCursor() {
         cursorInfo.bVisible = false;
         cursorInfo.dwSize = 1;
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-    } catch (const std::exception& e) {
-        std::cerr << "Exception in hideCursor: " << e.what() << std::endl;
+    } catch (const exception& e) {
+        cerr << "Exception in hideCursor: " << e.what() << endl;
     }
 }
 
-void printDataAtXY(int x, int y, const std::string& data) {
+void printDataAtXY(int x, int y, const string& data) {
     setCursorPosition(x, y);
-    std::cout << std::string(60, ' ');
+    cout << string(60, ' ');
     setCursorPosition(x, y);
-    std::cout << "=> " << data;
+    cout << "=> " << data;
 }
 
 void clearOutputArea(int x, int y, int lines) {
     for (int i = 0; i < lines; ++i) {
         setCursorPosition(x, y + i);
-        std::cout << std::string(55, ' ');
+        cout << string(55, ' ');
     }
 }
 
-void updatePositions(GameLogic& game, std::vector<std::vector<std::vector<int>>>& TableauPositions, std::vector<std::vector<int>>& FoundationPositions, std::vector<std::vector<int>>& AdditionalPilesPositions) {
+void updatePositions(GameLogic& game, vector<vector<vector<int>>>& TableauPositions, vector<vector<int>>& FoundationPositions, vector<vector<int>>& AdditionalPilesPositions) {
     int Y_START = 245;
     int X_START = 12;
     for (int i = 0; i < 7; ++i) {
@@ -109,18 +110,18 @@ void updatePositions(GameLogic& game, std::vector<std::vector<std::vector<int>>>
     }
 }
 
-void handleMouseClick(GameLogic& game, POINT pt, std::vector<std::vector<std::vector<int>>>& TableauPositions, std::vector<std::vector<int>>& FoundationPositions, std::vector<std::vector<int>>& AdditionalPilesPositions, bool& isCardSelected, Card& selectedCard, int& selectedTableau, int& selectedCardIndex, int& selectedCardCount, bool& isWasteSelected, bool& isFoundationSelected, int& selectedFoundation) {
+void handleMouseClick(GameLogic& game, POINT pt, vector<vector<vector<int>>>& TableauPositions, vector<vector<int>>& FoundationPositions, vector<vector<int>>& AdditionalPilesPositions, bool& isCardSelected, Card& selectedCard, int& selectedTableau, int& selectedCardIndex, int& selectedCardCount, bool& isWasteSelected, bool& isFoundationSelected, int& selectedFoundation) {
     if (!isCardSelected && !isWasteSelected && !isFoundationSelected) {
         for (int i = 0; i < 7; ++i) {
             Stack cards = game.getTableauPiles()[i].getCards();
             int cardCount = cards.getSize();
-            std::vector<Card> tempCards;
+            vector<Card> tempCards;
 
             for (int j = 0; j < cardCount; ++j) {
                 if (!cards.isEmpty()) {
                     tempCards.push_back(cards.pop());
                 } else {
-                    std::cerr << "Error: Attempted to pop from an empty stack." << std::endl;
+                    cerr << "Error: Attempted to pop from an empty stack." << endl;
                     break;
                 }
             }
@@ -182,7 +183,7 @@ void handleMouseClick(GameLogic& game, POINT pt, std::vector<std::vector<std::ve
     }
 }
 
-void handleCardMove(GameLogic& game, POINT pt, std::vector<std::vector<std::vector<int>>>& TableauPositions, std::vector<std::vector<int>>& FoundationPositions, std::vector<std::vector<int>>& AdditionalPilesPositions, bool& isCardSelected, Card& selectedCard, int& selectedTableau, int& selectedCardCount, bool& isWasteSelected, bool& isFoundationSelected, int& selectedFoundation) {
+void handleCardMove(GameLogic& game, POINT pt, vector<vector<vector<int>>>& TableauPositions, vector<vector<int>>& FoundationPositions, vector<vector<int>>& AdditionalPilesPositions, bool& isCardSelected, Card& selectedCard, int& selectedTableau, int& selectedCardCount, bool& isWasteSelected, bool& isFoundationSelected, int& selectedFoundation) {
     if (isCardSelected) {
         for (int i = 0; i < 7; ++i) {
             if (i != selectedTableau) {
@@ -300,7 +301,7 @@ void handleModeSwitch(bool& isDarkMode, GameLogic& game) {
     system("cls");
     game.displayGame();
     clearOutputArea(80, 25, 1);
-    printDataAtXY(80, 25, "Switched to " + std::string(isDarkMode ? "Dark" : "Light") + " Mode");
+    printDataAtXY(80, 25, "Switched to " + string(isDarkMode ? "Dark" : "Light") + " Mode");
     Sleep(200);
 }
 
@@ -313,10 +314,10 @@ void GameLoop() {
     bool isDarkMode = false;
     try {
         GameLogic game;
-        std::vector<std::vector<std::vector<int>>> TableauPositions(7);
-        std::vector<std::vector<int>> FoundationPositions(4);
-        std::vector<std::vector<int>> AdditionalPilesPositions(2);
-        std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+        vector<vector<vector<int>>> TableauPositions(7);
+        vector<vector<int>> FoundationPositions(4);
+        vector<vector<int>> AdditionalPilesPositions(2);
+        chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
         hideCursor();
 
         system("cls");
@@ -325,9 +326,9 @@ void GameLoop() {
         updatePositions(game, TableauPositions, FoundationPositions, AdditionalPilesPositions);
         while (true) {
             try {
-                int elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - startTime).count();
+                int elapsedTime = chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now() - startTime).count();
                 setCursorPosition(95, 4);
-                std::cout << "Time Elapsed: " << elapsedTime << "s";
+                cout << "Time Elapsed: " << elapsedTime << "s";
 
                 SHORT leftButton = GetAsyncKeyState(VK_LBUTTON);
                 SHORT rightButton = GetAsyncKeyState(VK_RBUTTON);
@@ -363,13 +364,13 @@ void GameLoop() {
                 }
 
                 Sleep(100);
-            } catch (const std::exception& e) {
-                std::cerr << "Exception in game loop: " << e.what() << std::endl;
+            } catch (const exception& e) {
+                cerr << "Exception in game loop: " << e.what() << endl;
             }
         }
         system("cls");
         game.displayGame();
-    } catch (const std::exception& e) {
-        std::cerr << "Exception in gameLoop: " << e.what() << std::endl;
+    } catch (const exception& e) {
+        cerr << "Exception in gameLoop: " << e.what() << endl;
     }
 }

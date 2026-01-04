@@ -1,18 +1,19 @@
 #pragma once
 
 #include "Card.h"
+using namespace std;
 
 class Node {
 public:
     Card data;
-    std::unique_ptr<Node> next;
+    unique_ptr<Node> next;
 
     Node(const Card& data) : data(data), next(nullptr) {}
 };
 
 class LinkedList {
 protected:
-    std::unique_ptr<Node> head;
+    unique_ptr<Node> head;
     int size;
 
 public:

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+using namespace std;
 
 class Deck {
     public:
@@ -23,8 +24,8 @@ class Deck {
         }
 
         bool shuffleDeck() {
-            auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-            std::shuffle(cards.begin(), cards.end(), std::default_random_engine(seed));
+            auto seed = chrono::system_clock::now().time_since_epoch().count();
+            shuffle(cards.begin(), cards.end(), default_random_engine(seed));
             return true;
         }
 
@@ -43,5 +44,5 @@ class Deck {
         }
 
     private: 
-        std::vector<Card> cards;
+        vector<Card> cards;
 };

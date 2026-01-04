@@ -3,6 +3,7 @@
 #include "Pile.h"
 #include "Stack.h"
 #include "Card.h"
+using namespace std;
 
 class WastePile: Pile {
     private:
@@ -19,7 +20,7 @@ class WastePile: Pile {
         }
 
         Card removeCard() override {
-            if (isEmpty()) std::cerr << "Waste Pile is Empty!" << std::endl;
+            if (isEmpty()) cerr << "Waste Pile is Empty!" << endl;
             else {
                 Card topCard = cards.pop();
                 return topCard;
@@ -27,7 +28,7 @@ class WastePile: Pile {
         }
 
         Card topCard() const override {
-            if (isEmpty()) std::cerr << "Waste Pile is Empty!" << std::endl;
+            if (isEmpty()) cerr << "Waste Pile is Empty!" << endl;
             else return cards.peek();
         }
 

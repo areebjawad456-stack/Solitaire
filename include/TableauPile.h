@@ -4,6 +4,7 @@
 #include "Stack.h"
 #include "Card.h"
 #include <vector>
+using namespace std;
 
 class TableauPile : public Pile {
 private:
@@ -39,12 +40,12 @@ public:
         return cards.getSize();
     }
 
-    std::vector<Card> removeCards(int count) {
+    vector<Card> removeCards(int count) {
         if (count > cards.getSize()) {
-            throw std::runtime_error("Not enough cards");
+            throw runtime_error("Not enough cards");
         }
 
-        std::vector<Card> removedCards;
+        vector<Card> removedCards;
         Stack tempStack;
         // Remove cards and store them
         for (int i = 0; i < count; i++) {
@@ -63,34 +64,34 @@ public:
         }
 
         // Reverse order for proper sequence
-        std::reverse(removedCards.begin(), removedCards.end());
+        reverse(removedCards.begin(), removedCards.end());
         return removedCards;
     }
 
-    void addCards(const std::vector<Card>& newCards) {
+    void addCards(const vector<Card>& newCards) {
         for (const Card& card : newCards) {
             addCard(card);
         }
     }
 
-    std::vector<Card> peekCards(int count) const {
+    vector<Card> peekCards(int count) const {
         if (count > cards.getSize()) {
-            throw std::runtime_error("Not enough cards");
+            throw runtime_error("Not enough cards");
         }
 
-        std::vector<Card> visibleCards;
+        vector<Card> visibleCards;
         Stack tempStack = cards;
         for (int i = 0; i < count; i++) {
             visibleCards.push_back(tempStack.pop());
         }
-        std::reverse(visibleCards.begin(), visibleCards.end());
+        reverse(visibleCards.begin(), visibleCards.end());
         return visibleCards;
     }
 
     void displayTopCard(int x,int y) const {
         if (!cards.isEmpty()) {
             Stack tempStack = cards;
-            std::vector<Card> cardList;
+            vector<Card> cardList;
 
             while (!tempStack.isEmpty()) {
                 cardList.push_back(tempStack.pop());

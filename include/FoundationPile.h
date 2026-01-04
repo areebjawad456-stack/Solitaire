@@ -3,6 +3,7 @@
 #include "Pile.h"
 #include "Stack.h"
 #include "Card.h"
+using namespace std;
 
 class FoundationPile: public Pile {
 private:
