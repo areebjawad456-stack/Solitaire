@@ -1112,13 +1112,27 @@ public:
         return true;
     }
 
+    // void printPersistentInstructions(int x, int y) const {
+    //     setCursorPosition(x, y);
+    //     cout << "=> Press D to deselect the card";
+    //     setCursorPosition(x, y + 1);
+    //     cout << "=> Press S to switch between Dark and Light mode";
+    //     setCursorPosition(x, y + 2);
+    //     cout << "=> Press ESC to exit the game";
+    // }
+
+
+    // Only showing the modified method - rest of GameLogic.h remains the same
+
     void printPersistentInstructions(int x, int y) const {
         setCursorPosition(x, y);
-        cout << "=> Press D to deselect the card";
+        std::cout << "=> Press D to deselect the card";
         setCursorPosition(x, y + 1);
-        cout << "=> Press S to switch between Dark and Light mode";
+        std::cout << "=> Press S to switch between Dark and Light mode";
         setCursorPosition(x, y + 2);
-        cout << "=> Press ESC to exit the game";
+        std::cout << "=> Press F to view game rules";
+        setCursorPosition(x, y + 3);
+        std::cout << "=> Press ESC to exit the game";
     }
 
     void displayGame() const {
